@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">ゴミ通知</string>
+    <string name="widget_description">次のゴミの日を表示します</string>
+</resources>
