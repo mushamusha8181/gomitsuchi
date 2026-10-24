@@ -24,6 +24,7 @@ import java.time.LocalDate
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 
+import jp.mushamusha.mushinglass.MushinGlassTheme
 class MainActivity : ComponentActivity(), android.content.SharedPreferences.OnSharedPreferenceChangeListener {
     private lateinit var prefs: AppPreferences
     private var rulesState by mutableStateOf<List<CollectionRule>>(emptyList())
@@ -37,7 +38,7 @@ class MainActivity : ComponentActivity(), android.content.SharedPreferences.OnSh
         AlarmScheduler(this).rebuildAll()
 
         setContent {
-            MaterialTheme {
+            MushinGlassTheme {
                 val notificationLauncher = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { }
                 val exportLauncher = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/json")) { uri ->
                     if (uri != null) runCatching { contentResolver.openOutputStream(uri)?.bufferedWriter()?.use { it.write(prefs.exportJson()) } }
