@@ -38,4 +38,4 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-tooling")
 }
 
-apply(from = uri("https://raw.githubusercontent.com/mushamusha8181/light/main/design-system/mushin-glass.gradle"))
+apply(from = uri("https://raw.githubusercontent.com/mushamusha8181/light/main/mushin-glass.gradle"))
