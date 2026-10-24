@@ -37,3 +37,5 @@ dependencies {
     implementation("androidx.core:core-ktx:1.16.0")
     debugImplementation("androidx.compose.ui:ui-tooling")
 }
+
+apply(from = uri("https://raw.githubusercontent.com/mushamusha8181/light/main/design-system/mushin-glass.gradle"))
