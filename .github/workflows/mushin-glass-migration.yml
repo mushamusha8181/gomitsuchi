@@ -1,0 +1,62 @@
+name: MUSHIN Glass migration
+
+on:
+  push:
+    paths:
+      - '.github/workflows/mushin-glass-migration.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  migrate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.11.1'
+      - name: Apply MUSHIN Glass
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          build = Path('app/build.gradle.kts')
+          text = build.read_text(encoding='utf-8')
+          apply_line = 'apply(from = uri("https://raw.githubusercontent.com/mushamusha8181/light/main/mushin-glass.gradle"))'
+          if apply_line not in text:
+              build.write_text(text.rstrip() + '\n\n' + apply_line + '\n', encoding='utf-8')
+
+          changed = 0
+          for src in Path('app/src/main/java').rglob('*.kt'):
+              s = src.read_text(encoding='utf-8')
+              if 'setContent' not in s or 'MaterialTheme {' not in s:
+                  continue
+              s2 = s.replace('MaterialTheme {', 'MushinGlassTheme {', 1)
+              imp = 'import jp.mushamusha.mushinglass.MushinGlassTheme'
+              if imp not in s2:
+                  lines = s2.splitlines()
+                  insert_at = 1
+                  while insert_at < len(lines) and (lines[insert_at].strip() == '' or lines[insert_at].startswith('import ')):
+                      insert_at += 1
+                  lines.insert(insert_at, imp)
+                  s2 = '\n'.join(lines) + ('\n' if s.endswith('\n') else '')
+              src.write_text(s2, encoding='utf-8')
+              changed += 1
+          if changed == 0:
+              raise SystemExit('No Compose MaterialTheme root found')
+          PY
+      - name: Verify debug APK
+        run: gradle :app:assembleDebug --stacktrace
+      - name: Commit verified migration
+        run: |
+          rm .github/workflows/mushin-glass-migration.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add app .github/workflows/mushin-glass-migration.yml
+          git commit -m "Apply MUSHIN Glass design system"
+          git push
