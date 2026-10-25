@@ -1,9 +1,10 @@
 name: Flat MUSHIN FAB patch v2
 
-"on":
+on:
   push:
     paths:
-      - MUSHIN_FLAT_FAB_V2_TRIGGER
+      - 'MUSHIN_FLAT_FAB_V2_TRIGGER'
+      - '.github/workflows/oneoff-flat-fab-v2.yml'
 
 permissions:
   contents: write
