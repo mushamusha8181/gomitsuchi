@@ -151,7 +151,19 @@ private fun GomiApp(
 
     Scaffold(
         topBar = { TopAppBar(title = { Text("ゴミ通知") }, actions = { TextButton(onClick = { settingsOpen = true }) { Text("設定") } }) },
-        floatingActionButton = { SmallFloatingActionButton(onClick = { adding = true }) { Text("＋") } }
+        floatingActionButton = {
+            SmallFloatingActionButton(
+                onClick = { adding = true },
+                containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.82f),
+                contentColor = MaterialTheme.colorScheme.onSurface,
+                elevation = FloatingActionButtonDefaults.elevation(
+                    defaultElevation = 0.dp,
+                    pressedElevation = 0.dp,
+                    focusedElevation = 0.dp,
+                    hoveredElevation = 0.dp
+                )
+            ) { Text("＋") }
+        }
     ) { padding ->
         Column(
             modifier = Modifier.padding(padding).padding(horizontal = 12.dp).verticalScroll(rememberScrollState()),
