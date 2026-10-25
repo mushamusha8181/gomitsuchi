@@ -1,5 +1,6 @@
 from pathlib import Path
 
+# trigger: 2026-10-25.2
 p = Path('app/src/main/java/jp/mushamusha/gomireminder/MainActivity.kt')
 s = p.read_text()
 old = 'floatingActionButton = { SmallFloatingActionButton(onClick = { adding = true }) { Text("＋") } }'
